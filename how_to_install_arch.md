@@ -1,3 +1,7 @@
+# Instalação
+
+## Preparação
+
 - Carregar perfil de teclado  
 **loadkeys br-abnt2**
 
@@ -6,6 +10,8 @@
 
 - Em caso de wifi  
 **wifi-menu**
+
+## Particionamento
 
 - Exibir todas os dispositivos disponíveis  
 **fdisk -l**
@@ -28,6 +34,8 @@
 **mkfs.ext4 /dev/sda3**  
 **mkswap /dev/sda4**
 
+## Montagem
+
 - Montar o / no /mnt  
 **mount /dev/sda2 /mnt**
 
@@ -49,6 +57,8 @@
 - Ativar o swap  
 **swapon /dev/sda4**
 
+## Instação do sistema base
+
 - Editar o mirrorlist (movendo a linha para cima ou comentando os outros com '#')  
 **nano /etc/pacman.d/mirrorlist**
 
@@ -58,9 +68,11 @@
 - Se quiser instalar a versão de desenvolvedor, rodar:  
 **pactrap /mnt base base-devel**
 
+## Configuração do sistema
+
 - Gerar um FSTAB para informar onde estão as partições do sistema  
 **genfstab -U -p /mnt >> /mnt/etc/fstab**
-	- Para verificar se foi gerar:  
+	- Para verificar se foi gerado:  
 	**cat /mnt/etc/fstab**
 
 - Mudar para o novo sistema criado  
@@ -69,3 +81,108 @@
 - Definir relógio  
 **ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime**
 
+- Definir o idioma do sistema, descomentando a linha pt_BR.UTF-8 UTF-8  
+**nano /etc/locale.gen**
+
+- Gere as configurações de linguagem  
+**locale-gen**
+
+- Mais algumas configurações de lingua  
+**echo LANG=pt_BR.UTF-8 >> /etc/locale.conf**  
+**echo KEYMAP=br-abnt2 >> /etc/vconsole.conf**
+
+- Definir o hostname para arch  
+**nano /etc/hostname**
+
+- Definir o arquivo de host  
+**nano /etc/hosts**
+	- Adicionar as seguintes linhas:  
+	**127.0.0.1 localhost.localdomain localhost**  
+	**::1 localhost.localdomain localhost**  
+	**127.0.1.1 meuhostname.localdomain meuhostname**
+
+- Definir a nova senha de root com:  
+**passwd**
+
+- Adicionar um novo usuário  
+**useradd -m -g users -G wheel eduardo**
+
+- Adicionar pacotes essênciais  
+**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo**
+
+- Adicionar usuário a lista de sudo  
+**nano /etc/sudoers**  
+	- Adicione o seguinte código ao final do arquivo:  
+	**eduardo ALL=(ALL) ALL**
+
+## Instação do GRUB
+
+- Seguir as instruções baseadas no tipo de instalação utilizada    
+	- **BIOS**  
+		- Instalar o grub  
+		**pacman -S grub**
+
+		- Rodar grub-install  
+		**grub-install --target=i386-pc --recheck /dev/sda**
+
+		- Copiar um arquivo para a pasta do grub  
+		**cp /usr/share/locale/en\@quot/LC_MESSAGES/grub.mo /boot/grub/locale/en.mo**
+
+	- **UEFI**  
+		- Instalar o grub  
+		**pacman -S grub-efi-x86_64 efibootmgr**
+
+		- Rodar grub-install  
+		**grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=arch_grub --recheck**
+
+		- Copiar um arquivo para a pasta do grub  
+		**cp /usr/share/locale/en\@quot/LC_MESSAGES/grub.mo /boot/grub/locale/en.mo**
+	
+	- Rodar  
+	**grub-mkconfig -o /boot/grub/grub.cfg**
+
+# Pós-instalação 
+
+- Para conectar ao wifi  
+**wifi-menu**
+
+- Para conectar a rede cabeada (ativar o serviço)  
+**systemctl status NetworkManager**  
+**systemctl enable NetworkManager**  
+**systemctl start NetworkManager**
+
+- Atualizar sistemas  
+**pacman -Sy**
+
+- Instalar o xorg  
+**pacman -S xorg-server**
+
+# Instalar drivers de video
+
+## Intel
+
+- Instalar driver  
+**pacman -S xf86-video-intel libgl mesa**
+
+## NVidia
+
+- Instalar driver  
+**pacman -S nvidia nvidia-libgl mesa**
+
+## AMD
+
+- Instalar driver  
+**pacman -S mesa xf86-video-amdgpu**
+
+## VirtualBox
+
+- Instalar driver de convidado para virtualbox em maquina virtual  
+**pacman -S virtualbox-guest-utils virtualbox-guest-modules-arch mesa mesa-libgl**
+
+# Instalação do ambiente gráfico
+
+- Escolher o ambiente gráfico que mais lhe agrade, algumas opções são, xfce, dde, gnome, qtile, i3, cinnamon, etc. 
+
+# Info
+
+Para mais informações, acessar https://diolinux.com.br/2019/07/como-instalar-arch-linux-tutorial-iniciantes.html
