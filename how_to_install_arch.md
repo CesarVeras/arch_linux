@@ -108,7 +108,7 @@
 **useradd -m -g users -G wheel eduardo**
 
 - Adicionar pacotes essênciais  
-**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo**
+**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo alacritty firefox**
 
 - Adicionar usuário a lista de sudo  
 **nano /etc/sudoers**  
@@ -181,7 +181,11 @@
 
 # Instalação do ambiente gráfico
 
-- Escolher o ambiente gráfico que mais lhe agrade, algumas opções são, xfce, dde, gnome, qtile, i3, cinnamon, etc. 
+- Escolher o ambiente gráfico que mais lhe agrade, algumas opções são, xfce, dde, gnome, qtile, i3, cinnamon, etc.  
+- Para o i3 usar:  
+**pacman -S i3-gaps i3status i3lock dmenu**  
+- Para xfce  usar:  
+**pacman -S xfce4 xfce4-goodies**
 
 # Info
 
