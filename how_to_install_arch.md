@@ -61,6 +61,8 @@
 
 - Editar o mirrorlist (movendo a linha para cima ou comentando os outros com '#')  
 **nano /etc/pacman.d/mirrorlist**
+**pacman -S reflector**  
+**reflector --country Brazil --sort rate --save /etc/pacman.d/mirrorlist**
 
 - Instalar o sistema  
 **pactrap /mnt base linux linux-firmware**
@@ -108,7 +110,7 @@
 **useradd -m -g users -G wheel eduardo**
 
 - Adicionar pacotes essênciais  
-**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo alacritty firefox**
+**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo alacritty firefox netctl**
 
 - Adicionar usuário a lista de sudo  
 **nano /etc/sudoers**  
