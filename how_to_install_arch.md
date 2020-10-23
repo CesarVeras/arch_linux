@@ -5,6 +5,9 @@
 - Carregar perfil de teclado  
 **loadkeys br-abnt2**
 
+- Editar o mirrorlist (movendo a linha para cima ou comentando os outros com '#')  
+**reflector --country Brazil --sort rate --save /etc/pacman.d/mirrorlist**
+
 - Testar conexão  
 **ping google.com**
 
@@ -23,7 +26,7 @@
 **cfdisk /dev/sda**  
 	- Escolher a label gpt
 	- Criar 4 partições
-    	- **sda1** 500MB efi (type = BIOS boot)
+    	- **sda1** 500MB efi
     	- **sda2** 50GB /
     	- **sda3** Todo o resto para /home/ 
     	- **sda4** 2GB swap
@@ -59,11 +62,6 @@
 
 ## Instação do sistema base
 
-- Editar o mirrorlist (movendo a linha para cima ou comentando os outros com '#')  
-**nano /etc/pacman.d/mirrorlist**
-**pacman -S reflector**  
-**reflector --country Brazil --sort rate --save /etc/pacman.d/mirrorlist**
-
 - Instalar o sistema  
 **pactrap /mnt base linux linux-firmware**
 
@@ -76,6 +74,9 @@
 **genfstab -U -p /mnt >> /mnt/etc/fstab**
 	- Para verificar se foi gerado:  
 	**cat /mnt/etc/fstab**
+
+- Atualizar o mirrorlist do novo sistema  
+**reflector --country Brazil --sort rate --save /mnt/etc/pacman.d/mirrorlist**
 
 - Mudar para o novo sistema criado  
 **arch-chroot /mnt**
@@ -94,14 +95,12 @@
 **echo KEYMAP=br-abnt2 >> /etc/vconsole.conf**
 
 - Definir o hostname para arch  
-**nano /etc/hostname**
+**echo arch >> /etc/hostname**
 
 - Definir o arquivo de host  
-**nano /etc/hosts**
-	- Adicionar as seguintes linhas:  
-	**127.0.0.1 localhost.localdomain localhost**  
-	**::1 localhost.localdomain localhost**  
-	**127.0.1.1 meuhostname.localdomain meuhostname**
+**echo 127.0.01 localhost.localdoamin localhost >> /etc/hosts**  
+**echo ::1 localhost.localdomain localhost >> /etc/hosts**    
+**echo 127.0.1.1 arch.localdomain arch >> /etc/hosts**
 
 - Definir a nova senha de root com:  
 **passwd**
@@ -109,13 +108,18 @@
 - Adicionar um novo usuário  
 **useradd -m -g users -G wheel eduardo**
 
+- Definir a senha do usuário eduardo  
+**passwd eduardo**
+
 - Adicionar pacotes essênciais  
-**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo alacritty firefox netctl**
+**pacman -S dosfstools os-prober mtools network-manager-applet networkmanager wpa_supplicant wireless_tools dialog sudo alacritty firefox git pulseaudio pulseaudio-alsa jack**
 
 - Adicionar usuário a lista de sudo  
 **nano /etc/sudoers**  
 	- Adicione o seguinte código ao final do arquivo:  
-	**eduardo ALL=(ALL) ALL**
+	**eduardo ALL=(ALL) ALL**  
+	- Ou descomentar linha:  
+	**# %wheel All=(ALL) NOPASSWD: All**
 
 ## Instação do GRUB
 
@@ -179,7 +183,7 @@
 ## VirtualBox
 
 - Instalar driver de convidado para virtualbox em maquina virtual  
-**pacman -S virtualbox-guest-utils virtualbox-guest-modules-arch mesa mesa-libgl**
+**pacman -S virtualbox-guest-utils virtualbox-host-modules-arch mesa mesa-libgl**
 
 # Instalação do ambiente gráfico
 
@@ -187,8 +191,18 @@
 - Para o i3 usar:  
 **pacman -S i3-gaps i3status i3lock dmenu**  
 - Para xfce  usar:  
-**pacman -S xfce4 xfce4-goodies**
-
+**pacman -S xfce4 xfce4-goodies**  
+- Para gnome usar:  
+**pacman -S gnome**  
+- Para plasma usar:  
+**pacman -S plasma kde-applications-meta**  
+- Para tratar o appstream-data usar:  
+  **sudo downgrade archlinux-appstream-data**  
+  **escolher opção 20200103**  
+- Instalar o YAY(AUR):  
+  **git clone https://aur.archlinux.org/yay.git**    
+  **cd yay**  
+  **makepkg -si**
 # Info
 
 Para mais informações, acessar https://diolinux.com.br/2019/07/como-instalar-arch-linux-tutorial-iniciantes.html
